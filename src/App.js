@@ -1,25 +1,23 @@
-import logo from './logo.svg';
 import './App.css';
+import Model2 from './Model2'
+import { Canvas } from '@react-three/fiber'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div id="main">
+      <div class="container">
+        <div class="canvas-wrapper">
+          <canvas id="output"></canvas>
+          <video id="video"></video>
+        </div>
+      </div>
     </div>
   );
 }
 
+/*
+      <div className="App">
+        <img id='face' src='./test_face.jpg' crossOrigin='anonymous' />
+      </div>
+*/
 export default App;
