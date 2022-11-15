@@ -49,10 +49,10 @@ export class Camera {
         };
       });
       camera.video.play();
-      const videoWidth = camera.video.videoWidth;
-      const videoHeight = camera.video.videoHeight;
-      camera.video.width = videoWidth;
-      camera.video.height = videoHeight;
+      // const videoWidth = camera.video.videoWidth;
+      // const videoHeight = camera.video.videoHeight;
+      // camera.video.width = videoWidth;
+      // camera.video.height = videoHeight;
       // const canvasContainer = document.querySelector('.canvas-wrapper');
       // canvasContainer.style = `width: ${videoWidth}px; height: ${videoHeight}px`;
       camera.ctx.translate(camera.video.videoWidth, 0);

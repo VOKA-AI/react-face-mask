@@ -18,8 +18,7 @@ export default function Model(props) {
           castShadow
           receiveShadow
           geometry={nodes.stacy.geometry}
-          skeleton={nodes.stacy.skeleton}
-          scale={100}>
+          skeleton={nodes.stacy.skeleton}>
           <meshStandardMaterial map={texture} map-flipY={false} skinning />
         </skinnedMesh>
     </group>

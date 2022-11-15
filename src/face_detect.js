@@ -1,12 +1,20 @@
 import { createModelDetector } from './detector'
 import { Camera } from './camera'
 import Model from './Model'
+import Model2 from './Model2'
 import { useState, useEffect, useRef } from 'react'
-import { useFrame } from '@react-three/fiber'
+import { useFrame, useThree } from '@react-three/fiber'
 
 let detector, camera;
 let initialized = false;
 let threeObject3D = null;
+let _threeFiber;
+let x = 0;
+let y = 0;
+let z = 0;
+let rx = 0;
+let ry = 0;
+let rz = 0;
 
 async function init() {
   try {
@@ -18,24 +26,18 @@ async function init() {
 }
 
 function update(faces) {
-      // console.log(threeObject3D)
-      let x = 0;
-      let y = 0;
-      let z = 0;
-      let rx = 0;
-      let ry = 0;
-      let rz = 0;
+      let threeCamera = _threeFiber.camera;
+      //tan(<horizontal FoV>/2), in radians (threeCamera.fov is vertical FoV)
+      const halfTanFOVX = Math.tan(threeCamera.aspect * threeCamera.fov * Math.PI/360);
       if(faces.length > 0) {
-        console.log((faces[0].box.xMax + faces[0].box.xMin) / 2);
-        console.log((faces[0].box.yMax + faces[0].box.yMin) / 2);
-        console.log(faces[0].box.height * faces[0].box.width);
-        x = (faces[0].box.xMax + faces[0].box.xMin) / 2 * 0.005 -0.5;
-        y = (faces[0].box.yMax + faces[0].box.yMin) / 2 * 0.005 - 0.5;
-        z = (faces[0].box.height * faces[0].box.width) * 0.00005 + 0;
+        x = faces[0].keypoints[1].x / 100 - 2.8;
+        y = 0.5 - faces[0].keypoints[1].y / 150;
+        z = -faces[0].keypoints[1].z / 20;
+        console.log([x,y,z]);
       }
 
-      // rx = rx + 0.01;
-      // ry = ry + 0.01;
+      //rx = rx + 0.01;
+      //ry = ry + 0.01;
       // rz = rz + 0.01;
       // x = x + 0.01;
       // y = y + 0.01;
@@ -62,15 +64,10 @@ export default function FaceFollower(props) {
       threeObject3D = objRef.current
       // threeObject3D.position.set(0.0*0.2, -1*0.2, -0.6);
     });
-    let x = 0;
-    let y = 0;
-    let z = 0;
-    let rx = 0.01;
-    let ry = 0.01;
-    let rz = 0.01;
+    _threeFiber = useThree();
     return (
       <mesh ref={objRef}>
-        <Model />
+        <Model scale={0.01} />
       </mesh>
     )
 }
@@ -84,7 +81,7 @@ async function detect() {
   if (detector != null) {
     try {
       faces = await detector.estimateFaces(camera.video);
-      // console.log(faces);
+      console.log(faces);
       update(faces);
       return faces;
     } catch (error) {

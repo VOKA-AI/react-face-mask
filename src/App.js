@@ -4,16 +4,15 @@ import { Canvas } from '@react-three/fiber'
 import Model from './Model'
 import FaceFollower from './face_detect';
 
+const drawWidth = "800px";
+const drawHeight = "600px";
+
 function App() {
   return (
-      <div class="canvas-wrapper" style = {{
-        width: "100%",
-        height: "100%",
-        position: "fixed",
-      }}>
+      <div>
         <div class="three-wrapper" style={{
-           width: "100%",
-           height: "100%",
+           width: drawWidth,
+           height: drawHeight,
            position: 'fixed',
            zIndex:2,
          }}>
@@ -24,15 +23,15 @@ function App() {
         </div>
 
         <canvas id="output" style = {{
-           width: "100%",
-           height: "100%",
+           width: drawWidth,
+           height: drawHeight,
           position: 'fixed',
           zIndex: 3,
         }}></canvas>
 
         <video id="video" style={{
-           width: "100%",
-           height: "100%",
+           width: drawWidth,
+           height: drawHeight,
           position: 'fixed',
           zIndex: 1,
         }}></video>
