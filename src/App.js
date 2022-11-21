@@ -1,14 +1,12 @@
 import './App.css';
-import Model2 from './Model2'
 import { Canvas } from '@react-three/fiber'
-import Model from './Model'
-import FaceFollower from './face_detect';
+import FaceFollower from './FaceFollower';
 
 const drawWidth = "800px";
 const drawHeight = "600px";
 
 function App() {
-  return (
+    return (
       <div>
         <div class="three-wrapper" style={{
            width: drawWidth,
@@ -39,9 +37,4 @@ function App() {
   );
 }
 
-/*
-      <div className="App">
-        <img id='face' src='./test_face.jpg' crossOrigin='anonymous' />
-      </div>
-*/
 export default App;

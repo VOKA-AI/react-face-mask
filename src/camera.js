@@ -55,8 +55,10 @@ export class Camera {
       // camera.video.height = videoHeight;
       // const canvasContainer = document.querySelector('.canvas-wrapper');
       // canvasContainer.style = `width: ${videoWidth}px; height: ${videoHeight}px`;
-      camera.ctx.translate(camera.video.videoWidth, 0);
-      camera.ctx.scale(-1, 1);
+
+      // camera.ctx.translate(camera.video.videoWidth, 0);
+      
+      // camera.ctx.scale(-1, 1);
       return camera;
     }
 }
