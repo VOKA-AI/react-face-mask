@@ -2,7 +2,7 @@ import React  from 'react'
 import { useFrame } from '@react-three/fiber'
 import Model from './Model'
 import { useState, useEffect, useRef } from 'react'
-import { Camera } from './camera'
+import { Camera } from './Camera'
 import { FaceDetector } from './FaceDetector'
 
 let x = 0;
@@ -19,21 +19,20 @@ let videoElement;
 let outputElement;
 let FaceFollowerObject3D;
 
-export default function FaceFollower() {
+export default function FaceFollower(props) {
   const objRef = useRef()
 
   useEffect(() => {
     FaceFollowerObject3D = objRef.current;
-    videoElement = document.getElementById('video');
-    outputElement = document.getElementById('output');
+    videoElement = document.getElementById(props.videoID);
+    outputElement = document.getElementById(props.outputID);
 
     const initFaceDetector = async () => {
       detector = await FaceDetector.build();
     }
 
     const initCamera = async () => {
-      //camera = await Camera.build(videoElement, outputElement);
-      camera = await Camera.setupCamera();
+      camera = await Camera.build(videoElement, outputElement);
     }
 
     initFaceDetector().catch(console.error);
@@ -49,7 +48,7 @@ export default function FaceFollower() {
       detectFace()
     }
   });
-  
+
   return (
   	<mesh ref={objRef}>
   	  <Model />

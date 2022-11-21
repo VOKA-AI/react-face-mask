@@ -6,7 +6,6 @@ export class FaceDetector {
 
     async detect(video) {
         this.faces = await this.faceDetector.estimateFaces(video);
-        console.log(this.faces);
         return this.faces;
     }
 
@@ -25,7 +24,6 @@ export class FaceDetector {
 
     static async build(runtime = 'mediapipe', solutionPath = `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh@${faceMesh.VERSION}`) {
         let newFaceDetector = new FaceDetector();
-        // this.faceDetector = await this.createModelDetector();
         const FaceMeshModel = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
         const detectorConfig = {
           runtime: runtime,

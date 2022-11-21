@@ -4,6 +4,8 @@ import FaceFollower from './FaceFollower';
 
 const drawWidth = "800px";
 const drawHeight = "600px";
+const videoID = "video";
+const outputCanvasID = "output";
 
 function App() {
     return (
@@ -16,18 +18,18 @@ function App() {
          }}>
           <Canvas>
             <ambientLight />
-            <FaceFollower />
+            <FaceFollower videoID={videoID} outputID={outputCanvasID}/>
           </Canvas>
         </div>
 
-        <canvas id="output" style = {{
+        <canvas id={outputCanvasID} style = {{
            width: drawWidth,
            height: drawHeight,
           position: 'fixed',
           zIndex: 3,
         }}></canvas>
 
-        <video id="video" style={{
+        <video id={videoID} style={{
            width: drawWidth,
            height: drawHeight,
           position: 'fixed',
