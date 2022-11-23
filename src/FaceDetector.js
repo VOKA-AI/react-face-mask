@@ -1,8 +1,7 @@
-import * as faceLandmarksDetection from '@tensorflow-models/face-landmarks-detection';
 import * as faceMesh from '@mediapipe/face_mesh';
-import { Camera } from '@mediapipe/camera_utils'
+import { Camera } from '@mediapipe/camera_utils';
 import { Face } from "kalidokit";
-import { fovHeight, dictSortByValue, dictMax } from './utils'
+import { modelUpdateBlandshape } from './Model'
 
 let _videoElement = null;
 let threeObject3D = null;
@@ -15,41 +14,43 @@ let rx = 0;
 let ry = 0;
 let rz = 0;
 
+function updateModelBlandshape(blandshape) {
+    modelUpdateBlandshape(blandshape);
+}
+
+function updateModelPosition(model, position) {
+    model.position.set(position['x'], position['y'], position['z']);
+}
+
+function updateModelRotation(model, rotation) {
+  // set rotation and apply it to position
+  model.rotation.x = rotation['x'];
+  model.rotation.y = rotation['y'];
+  model.rotation.z = rotation['z'];
+}
+
+function updateModelRotationEuler(model, euler) {
+
+}
+
 function update(riggedFace) {
-    //console.log(riggedFace.head.x);
   if(!riggedFace || !threeObject3D) {
     return;
   }
-  let mouth_shape = Object.keys(dictMax(riggedFace.mouth.shape))[0];
-  console.log(mouth_shape);
 
-  let fov_height = fovHeight(threeCamera.fov, threeCamera.position.z);
-  let fov_width = fov_height * threeCamera.aspect;
-  y = fov_height / 2;
-  x = fov_width / 2;
-
-    rx = - riggedFace.head.degrees.x / 30;
-    ry = - riggedFace.head.degrees.y / 30;
-    rz = riggedFace.head.degrees.z / 30;
-    //modelUpdate(rx);
-    if (riggedFace.eye.l === 0) {
-          //start_play();
-    } else {
-          //console.log("stop");
-    }
+  updateModelBlandshape({'browInnerUp':1,'browDown_L':1,'cheekPuff':1});
   // set position
-  //threeObject3D.position.set(x,y,z);
-
+  updateModelPosition(threeObject3D, {'x':x, 'y':y, 'z':z});
 
   // set rotation and apply it to position
-  threeObject3D.rotation.x = rx;
-  threeObject3D.rotation.y = ry;
-  threeObject3D.rotation.z = rz;
+  rx = - riggedFace.head.degrees.x / 30;
+  ry = - riggedFace.head.degrees.y / 30;
+  rz = riggedFace.head.degrees.z / 30;
+  updateModelRotation(threeObject3D, {'x': rx, 'y': ry, 'z':rz});
 }
 
 function onResults(results) {
     if(results.multiFaceLandmarks.length < 1) {
-        console.log(results);
         return;
     }
 

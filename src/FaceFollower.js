@@ -1,10 +1,8 @@
-import React  from 'react'
-import { useFrame, useThree } from '@react-three/fiber'
-import Model from './Model'
-import Model2 from './Model2'
-import Model3, { modelUpdate } from './Model3'
-import { useState, useEffect, useRef } from 'react'
+import { useThree } from '@react-three/fiber'
+import { useEffect, useRef } from 'react'
 import { initFaceMesh } from './FaceDetector'
+
+import Model, { modelUpdate } from './Model'
 
 export default function FaceFollower(props) {
   const objRef = useRef();
@@ -19,7 +17,7 @@ export default function FaceFollower(props) {
 
   return (
   	<mesh ref={objRef}>
-  	  <Model3 modelName="/FaceCap.glb"/>
+  	  <Model modelName="/FaceCap.glb"/>
   	</mesh>
   )
 }

@@ -15,11 +15,23 @@ function toRadians(degree) {
     return degree * Math.PI / 180;
 }
 
+/*
+ * 利用fov和z坐标系位置，计算视角（Canvas）高度
+ * eg. fovHeight(threeCamera.fov, threeCamera.position.z)
+ */
 export function fovHeight(fov, z) {
   let half_fov = fov / 2;
   let half_fov_radians = toRadians(half_fov);
   let fov_height = Math.tan(half_fov_radians) * z * 2;
   return fov_height;
+}
+
+/*
+ * 利用（垂直）fov和z坐标系位置，计算视角（Canvas）高度
+ * eg. fovWidth(threeCamera.fov, threeCamera.position.z, threeCamera.aspect)
+ */
+export function fovWidth(fov, z, aspect) {
+    return fovHeight(fov, z) * aspect;
 }
 
 /*
