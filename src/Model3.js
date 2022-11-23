@@ -1,46 +1,36 @@
 import React, { useEffect } from "react"
 import { useGLTF, useTexture, useAnimations } from "@react-three/drei"
+import { useLoader, useFrame } from '@react-three/fiber';
+import * as THREE from "three";
 
-
-
-let _actions;
-let _names;
-
-export function start_play() {
-  _actions[_names[2]].reset().play()
+let tt = 0;
+export function modelUpdate(v) {
+  console.log(v);
+  tt = v;
 }
 
-export function stop_play() {
-  _actions[_names[2]].reset().stop()
+export function playAnimationInTime(t) {
+  // 在t时长内，把动画播放一遍
 }
 
 export default function Model(props) {
-  // Fetch model and a separate texture
-  const { nodes, animations } = useGLTF("/FaceCap.glb")
-  console.log(nodes);
-  console.log(animations);
-  const texture = useTexture("/stacy.jpg")
-  // Extract animation actions
-  const { ref, actions, names } = useAnimations(animations)
-  console.log(ref);
-  console.log(actions);
-  console.log(names);
-  _actions = actions;
-  _names = names;
-   useEffect(() => {
-     actions[names[0]].reset().play()
-   })
+  const { scene, animations } = useGLTF(props.modelName);
+  let mixer = new THREE.AnimationMixer( scene );
+  for( var idx in animations) {
+    mixer.clipAction( animations[idx] ).setLoop(THREE.LoopOnce);
+    mixer.clipAction( animations[idx] ).play();
+  }
+  useFrame((state, delta) => {
+    //console.log(delta);
+    //mixer.update(delta);
+    //mixer.setTime(0.00122);
+    //tt += 0.003i;
+    //mixer.setTime(tt);
+  });
+
   return (
-    <group ref={ref} dispose={null} rotation={[Math.PI / 2, 0, 0]} scale={10}>
-      
-        <primitive object={nodes.head} />
-        <skinnedMesh
-          castShadow
-          receiveShadow
-          geometry={nodes.head.geometry}
-          skeleton={nodes.head.skeleton}>
-          <meshStandardMaterial map={texture} map-flipY={false} skinning />
-        </skinnedMesh>
+    <group dispose={null} rotation={[0, 0, 0]} scale={15} >
+      <primitive object={scene} />
     </group>
   )
 }
