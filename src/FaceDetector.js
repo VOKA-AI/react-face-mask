@@ -7,9 +7,9 @@ let _videoElement = null;
 let threeObject3D = null;
 let threeCamera = null;
 
-let x = 0;
-let y = 0;
-let z = 0;
+let x = 3;
+let y = 3;
+let z = -3;
 let rx = 0;
 let ry = 0;
 let rz = 0;
@@ -38,7 +38,7 @@ function update(riggedFace) {
     return;
   }
 
-  updateModelBlandshape({'browInnerUp':1,'browDown_L':1,'cheekPuff':1});
+  updateModelBlandshape({'eyeBlink_L':1 - riggedFace.eye.r,'eyeBlink_R':1 - riggedFace.eye.l, 'mouthFunnel':riggedFace.mouth.shape.A, 'mouthLeft':riggedFace.mouth.shape.A / 10, 'mouthRight':riggedFace.mouth.shape.A / 10, 'mouthFrown_L':riggedFace.mouth.shape.A / 5, 'mouthFrown_R':riggedFace.mouth.shape.A / 5, 'jawOpen':riggedFace.mouth.shape.A / 5});
   // set position
   updateModelPosition(threeObject3D, {'x':x, 'y':y, 'z':z});
 
@@ -73,6 +73,13 @@ export function initFaceMesh(videoElement, faceFollower, _threeCamera) {
     const faceMeshModel = new faceMesh.FaceMesh({locateFile: (file) => {
         return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
     }});
+   
+    faceMeshModel.setOptions({
+        maxNumFaces: 1,
+        refineLandmarks: true,
+        minDetectionConfidence: 0.5,
+        minTrackingConfidence: 0.5,
+    });
 
     const camera = new Camera(videoElement, {
       onFrame: async () => {
