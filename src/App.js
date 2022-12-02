@@ -1,14 +1,14 @@
 import './App.css';
-import Model2 from './Model2'
 import { Canvas } from '@react-three/fiber'
-import Model from './Model'
-import FaceFollower from './face_detect';
+import FaceFollower from './FaceFollower';
 
-const drawWidth = "800px";
-const drawHeight = "600px";
+const drawWidth = "640px";
+const drawHeight = "480px";
+const videoID = "video";
+const outputCanvasID = "output";
 
 function App() {
-  return (
+    return (
       <div>
         <div class="three-wrapper" style={{
            width: drawWidth,
@@ -18,18 +18,18 @@ function App() {
          }}>
           <Canvas>
             <ambientLight />
-            <FaceFollower />
+            <FaceFollower videoID={videoID} outputID={outputCanvasID}/>
           </Canvas>
         </div>
 
-        <canvas id="output" style = {{
+        <canvas id={outputCanvasID} style = {{
            width: drawWidth,
            height: drawHeight,
           position: 'fixed',
           zIndex: 3,
         }}></canvas>
 
-        <video id="video" style={{
+        <video id={videoID} style={{
            width: drawWidth,
            height: drawHeight,
           position: 'fixed',
@@ -39,9 +39,4 @@ function App() {
   );
 }
 
-/*
-      <div className="App">
-        <img id='face' src='./test_face.jpg' crossOrigin='anonymous' />
-      </div>
-*/
 export default App;
