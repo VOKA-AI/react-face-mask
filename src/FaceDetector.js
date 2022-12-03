@@ -6,6 +6,7 @@ import FacePositionDebugger from './debug/debug_utils';
 import drawUtils from './debug/draw_utils';
 import * as drawingUtils from '@mediapipe/drawing_utils';
 import { mediapipeConfigOptions } from './config';
+import { FaceMeshPoints, getFaceMeshPoints, LEFT, RIGHT } from './enum';
 
 var _videoElement = null;
 var threeObject3D = null;
@@ -113,8 +114,9 @@ function onResults(results) {
     if(results.multiFaceLandmarks.length < 1) {
         return;
     }
-    //drawFaceMesh(results.multiFaceLandmarks[0]);
-    drawDebugger.draw_points(results.multiFaceLandmarks[0], "#111111");
+    // drawFaceMesh(results.multiFaceLandmarks[0]);
+    // drawDebugger.draw_points(results.multiFaceLandmarks[0], "#111111");
+    drawDebugger.draw_points(getFaceMeshPoints(results.multiFaceLandmarks[0], FaceMeshPoints.pupil[LEFT]), "#111111");
     
 
     let riggedFace;
