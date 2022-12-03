@@ -3,6 +3,7 @@ import { Camera } from '@mediapipe/camera_utils';
 import { Face } from "kalidokit";
 import { modelUpdateBlandshape } from './Model';
 import FacePositionDebugger from './debug/debug_utils';
+import { mediapipeConfigOptions } from './config';
 
 var _videoElement = null;
 var threeObject3D = null;
@@ -83,12 +84,7 @@ export function initFaceMesh(videoElement, faceFollower, _threeCamera) {
         return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
     }});
    
-    faceMeshModel.setOptions({
-        maxNumFaces: 1,
-        refineLandmarks: true,
-        minDetectionConfidence: 0.5,
-        minTrackingConfidence: 0.5,
-    });
+    faceMeshModel.setOptions(mediapipeConfigOptions);
 
     const camera = new Camera(videoElement, {
       onFrame: async () => {
