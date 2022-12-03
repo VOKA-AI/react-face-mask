@@ -20,6 +20,12 @@ function toRadians(degree) {
  * eg. fovHeight(threeCamera.fov, threeCamera.position.z)
  */
 export function fovHeight(fov, z) {
+  if(fov >= 180) {
+    return Infinity;
+  }
+  if(fov <= 0) {
+    return 0;
+  }
   let half_fov = fov / 2;
   let half_fov_radians = toRadians(half_fov);
   let fov_height = Math.tan(half_fov_radians) * z * 2;
