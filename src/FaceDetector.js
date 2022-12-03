@@ -3,6 +3,7 @@ import { Camera } from '@mediapipe/camera_utils';
 import { Face } from "kalidokit";
 import { modelUpdateBlandshape } from './Model';
 import FacePositionDebugger from './debug/debug_utils';
+import drawUtils from './debug/draw_utils';
 import * as drawingUtils from '@mediapipe/drawing_utils';
 import { mediapipeConfigOptions } from './config';
 
@@ -11,6 +12,7 @@ var threeObject3D = null;
 var threeCamera = null;
 var _riggedFace = null;
 var faceDebugger = null;
+var drawDebugger = null;
 
 var canvasCtx = null;
 var canvasElement = null;
@@ -112,6 +114,7 @@ function onResults(results) {
         return;
     }
     //drawFaceMesh(results.multiFaceLandmarks[0]);
+    drawDebugger.draw_points(results.multiFaceLandmarks[0], "#111111");
     
 
     let riggedFace;
@@ -149,6 +152,8 @@ export function initFaceMesh(videoElement, faceFollower, _threeCamera, _canvasEl
     camera.start();
 
     // faceDebugger = new FacePositionDebugger(videoElement, _threeCamera, threeObject3D);
+    let testCanvasElement = document.getElementById("test");
+    drawDebugger = new drawUtils(testCanvasElement);
 
     faceMeshModel.onResults(onResults);
 }

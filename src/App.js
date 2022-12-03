@@ -22,6 +22,13 @@ function App() {
           </Canvas>
         </div>
 
+        <canvas id="test" style = {{
+           width: drawWidth,
+           height: drawHeight,
+          position: 'fixed',
+          zIndex: 4,
+        }}></canvas>
+
         <canvas id={outputCanvasID} style = {{
            width: drawWidth,
            height: drawHeight,
