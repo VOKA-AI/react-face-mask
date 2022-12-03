@@ -3,6 +3,7 @@ import { Camera } from '@mediapipe/camera_utils';
 import { Face } from "kalidokit";
 import { modelUpdateBlandshape } from './Model';
 import FacePositionDebugger from './debug/debug_utils';
+import * as drawingUtils from '@mediapipe/drawing_utils';
 import { mediapipeConfigOptions } from './config';
 
 var _videoElement = null;
@@ -10,7 +11,10 @@ var threeObject3D = null;
 var threeCamera = null;
 var _riggedFace = null;
 var faceDebugger = null;
-var 
+
+var canvasCtx = null;
+var canvasElement = null;
+
 var x = 3;
 var y = 3;
 var z = -3;
@@ -23,7 +27,8 @@ function updateModelBlandshape(blandshape) {
 }
 
 function updateModelPosition(model, position) {
-    model.position.set(position['x'], position['y'], position['z']);
+    //model.position.set(position['x'], position['y'], position['z']);
+    model.position.set(100,100,-100);
 }
 
 function updateModelRotation(model, rotation) {
@@ -58,10 +63,56 @@ function update(riggedFace) {
   updateModelRotation(threeObject3D, {'x': rx, 'y': ry, 'z':rz});
 }
 
+function drawFaceMesh(landmarks) {
+    canvasCtx.save();
+    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+
+    drawingUtils.drawConnectors(
+        canvasCtx, landmarks, faceMesh.FACEMESH_TESSELATION,
+        {color: '#C0C0C070', lineWidth: 1});
+
+    drawingUtils.drawConnectors(
+        canvasCtx, landmarks, faceMesh.FACEMESH_RIGHT_EYE,
+        {color: '#FF3030'});
+
+    drawingUtils.drawConnectors(
+        canvasCtx, landmarks, faceMesh.FACEMESH_RIGHT_EYEBROW,
+        {color: '#FF3030'});
+
+    drawingUtils.drawConnectors(
+        canvasCtx, landmarks, faceMesh.FACEMESH_LEFT_EYE,
+        {color: '#30FF30'});
+
+    drawingUtils.drawConnectors(
+        canvasCtx, landmarks, faceMesh.FACEMESH_LEFT_EYEBROW,
+        {color: '#30FF30'});
+
+    drawingUtils.drawConnectors(
+        canvasCtx, landmarks, faceMesh.FACEMESH_FACE_OVAL,
+        {color: '#E0E0E0'});
+
+    drawingUtils.drawConnectors(
+        canvasCtx, landmarks, faceMesh.FACEMESH_LIPS, {color: '#E0E0E0'});
+
+
+    if(mediapipeConfigOptions.refineLandmarks) {
+      drawingUtils.drawConnectors(
+          canvasCtx, landmarks, faceMesh.FACEMESH_RIGHT_IRIS,
+          {color: '#FF3030'});
+
+      drawingUtils.drawConnectors(
+          canvasCtx, landmarks, faceMesh.FACEMESH_LEFT_IRIS,
+          {color: '#30FF30'});
+    }
+    canvasCtx.restore();
+}
+
 function onResults(results) {
     if(results.multiFaceLandmarks.length < 1) {
         return;
     }
+    //drawFaceMesh(results.multiFaceLandmarks[0]);
+    
 
     let riggedFace;
     riggedFace = Face.solve(results.multiFaceLandmarks[0], {
@@ -76,8 +127,10 @@ function onResults(results) {
     update(riggedFace);
 }
 
-export function initFaceMesh(videoElement, faceFollower, _threeCamera) {
+export function initFaceMesh(videoElement, faceFollower, _threeCamera, _canvasElement) {
     _videoElement = videoElement;
+    canvasElement = _canvasElement;
+    canvasCtx = canvasElement.getContext('2d');
     threeObject3D = faceFollower;
     threeCamera = _threeCamera;
     const faceMeshModel = new faceMesh.FaceMesh({locateFile: (file) => {

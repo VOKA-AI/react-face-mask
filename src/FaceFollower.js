@@ -12,7 +12,7 @@ export default function FaceFollower(props) {
     let FaceFollowerObject3D = objRef.current;
     let videoElement = document.getElementById(props.videoID);
     let outputElement = document.getElementById(props.outputID);
-    initFaceMesh(videoElement, FaceFollowerObject3D, threeFiber.camera);
+    initFaceMesh(videoElement, FaceFollowerObject3D, threeFiber.camera, outputElement);
   });
 
   return (
