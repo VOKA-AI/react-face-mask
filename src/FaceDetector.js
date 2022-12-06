@@ -31,7 +31,8 @@ function update(riggedFace) {
   }
   _riggedFace = riggedFace;
 
-  modelUpdateBlandshape({'eyeBlink_L':1 - riggedFace.eye.r,'eyeBlink_R':1 - riggedFace.eye.l, 'mouthFunnel':riggedFace.mouth.shape.A, 'mouthLeft':riggedFace.mouth.shape.A / 10, 'mouthRight':riggedFace.mouth.shape.A / 10, 'mouthFrown_L':riggedFace.mouth.shape.A / 5, 'mouthFrown_R':riggedFace.mouth.shape.A / 5, 'jawOpen':riggedFace.mouth.shape.A / 5});
+  //modelUpdateBlandshape({'eyeBlink_L':1 - riggedFace.eye.r,'eyeBlink_R':1 - riggedFace.eye.l, 'mouthFunnel':riggedFace.mouth.shape.A, 'mouthLeft':riggedFace.mouth.shape.A / 10, 'mouthRight':riggedFace.mouth.shape.A / 10, 'mouthFrown_L':riggedFace.mouth.shape.A / 5, 'mouthFrown_R':riggedFace.mouth.shape.A / 5, 'jawOpen':riggedFace.mouth.shape.A / 5});
+  modelUpdateBlandshape({'eye-R':1 - riggedFace.eye.r,'eye-L':1 - riggedFace.eye.l, 'eyes-_down': 0, 'mouse':riggedFace.mouth.shape.A});
 
   // set position
   modelUpdateModelPosition({'x':riggedFace.head.position.x, 'y':riggedFace.head.position.y, 'z':riggedFace.head.position.z});
