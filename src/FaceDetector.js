@@ -1,7 +1,7 @@
 import * as faceMesh from '@mediapipe/face_mesh';
 import { Camera } from '@mediapipe/camera_utils';
 import { Face } from "kalidokit";
-import { modelUpdateBlandshape } from './Model';
+import { modelUpdateBlandshape, modelUpdateModelPosition, modelUpdateModelRotation } from './Model2';
 import FacePositionDebugger from './debug/debug_utils';
 import drawUtils from './debug/draw_utils';
 import * as drawingUtils from '@mediapipe/drawing_utils';
@@ -25,45 +25,19 @@ var rx = 0;
 var ry = 0;
 var rz = 0;
 
-function updateModelBlandshape(blandshape) {
-    modelUpdateBlandshape(blandshape);
-}
-
-function updateModelPosition(model, position) {
-    //model.position.set(position['x'], position['y'], position['z']);
-    model.position.set(100,100,-100);
-}
-
-function updateModelRotation(model, rotation) {
-  // set rotation and apply it to position
-  model.rotation.x = rotation['x'];
-  model.rotation.y = rotation['y'];
-  model.rotation.z = rotation['z'];
-}
-
-function updateModelRotationEuler(model, euler) {
-
-}
-
 function update(riggedFace) {
   if(!riggedFace || !threeObject3D) {
     return;
   }
   _riggedFace = riggedFace;
 
-  updateModelBlandshape({'eyeBlink_L':1 - riggedFace.eye.r,'eyeBlink_R':1 - riggedFace.eye.l, 'mouthFunnel':riggedFace.mouth.shape.A, 'mouthLeft':riggedFace.mouth.shape.A / 10, 'mouthRight':riggedFace.mouth.shape.A / 10, 'mouthFrown_L':riggedFace.mouth.shape.A / 5, 'mouthFrown_R':riggedFace.mouth.shape.A / 5, 'jawOpen':riggedFace.mouth.shape.A / 5});
+  modelUpdateBlandshape({'eyeBlink_L':1 - riggedFace.eye.r,'eyeBlink_R':1 - riggedFace.eye.l, 'mouthFunnel':riggedFace.mouth.shape.A, 'mouthLeft':riggedFace.mouth.shape.A / 10, 'mouthRight':riggedFace.mouth.shape.A / 10, 'mouthFrown_L':riggedFace.mouth.shape.A / 5, 'mouthFrown_R':riggedFace.mouth.shape.A / 5, 'jawOpen':riggedFace.mouth.shape.A / 5});
 
   // set position
-  x = (riggedFace.head.position.x - 155) / 26;
-  y = - (riggedFace.head.position.y - 115) / 30;
-  z = (riggedFace.head.position.z - 15) / 3;
-  updateModelPosition(threeObject3D, {'x':x, 'y':y, 'z':z});
+  modelUpdateModelPosition({'x':riggedFace.head.position.x, 'y':riggedFace.head.position.y, 'z':riggedFace.head.position.z});
 
   // set rotation and apply it to position
-  rx = - (riggedFace.head.degrees.x - 15) / 50;
-  ry = - riggedFace.head.degrees.y / 50;
-  rz = riggedFace.head.degrees.z / 50;
-  updateModelRotation(threeObject3D, {'x': rx, 'y': ry, 'z':rz});
+  modelUpdateModelRotation({'x': riggedFace.head.degrees.x, 'y': riggedFace.head.degrees.y, 'z':riggedFace.head.degrees.z});
 }
 
 function drawFaceMesh(landmarks) {

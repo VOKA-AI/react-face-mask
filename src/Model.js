@@ -1,6 +1,10 @@
 import React from "react"
+import { useEffect, useRef } from 'react'
 import { useGLTF } from "@react-three/drei"
 import { useFrame } from '@react-three/fiber';
+
+var _model = null;
+var _mesh = null; // mesh with morph targets
 
 let blandshape = {
  "browDown_L":0,
@@ -75,17 +79,56 @@ function setMeshMorphTargetInfluences(mesh, blandshape, prefix = "") {
   }
 }
 
+export function modelUpdateModelPosition(position) {
+    var x = (position['x'] - 160) / 30;
+    var y = -(position['y'] - 115) / 30;
+    var z = (position['z'] - 20) / 30;
+    _model.position.set(x, y, z);
+}
+
+export function modelUpdateModelRotation(rotation) {
+  // set rotation and apply it to position
+  _model.rotation.x = -(rotation['x'] - 10) / 50;
+  _model.rotation.y = -rotation['y'] / 50;
+  _model.rotation.z = rotation['z'] / 50;
+}
+
+
+/*
+ * 获取包含morphTarget的mesh，不通的model可能不同
+ */
+function getMorphTargetMesh(model) {
+  var mesh = model.scenes[0].children[ 0 ].children[ 0 ].children[ 2 ];
+  //var mesh = model.scene.children[ 0 ].children[ 1 ];
+  _mesh = mesh;
+  return mesh;
+}
+
+/*
+ * 获取主要scene，用于primitive
+ */
+function getSceneFromModel(model) {
+  var scene = model.scene;
+  return scene;
+}
+
 export default function Model(props) {
-  const { scene, scenes } = useGLTF(props.modelName);
+  const model  = useGLTF(props.modelName);
+  const scene = getSceneFromModel(model);
+  //const { scene, scenes } = useGLTF(props.modelName);
   // 获取包含morphTarget的mesh，不通的model可能不通
-  var mesh = scenes[0].children[ 0 ].children[ 0 ].children[ 2 ];
+  var mesh = getMorphTargetMesh(model);
+  const objRef = useRef();
+  useEffect(() => {
+    _model = objRef.current;
+  });
 
   useFrame((state, delta) => {
     setMeshMorphTargetInfluences(mesh, blandshape,"shapes."); // 每一帧，都修改blandshapes的值，做出相应表情
   });
 
   return (
-    <group dispose={null} rotation={[0, 0, 0]} scale={15} >
+    <group dispose={null} rotation={[0, 0, 0]} scale={props.scale} ref={objRef}>
     <primitive object={scene} />
     </group>
     )
