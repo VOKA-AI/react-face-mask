@@ -26,8 +26,6 @@ export function modelUpdateBlandshape(bs) {
  * prefix指morphTargetDictionary中，blockshape名称的前缀
  */
 function setMeshMorphTargetInfluences(blandshape) {
-  console.log(blandshape);
-  console.log(_mesh);
   for(var key in blandshape) {
     _mesh.morphTargetInfluences[_mesh.morphTargetDictionary[key]] = blandshape[key];
   }
@@ -67,7 +65,6 @@ function getSceneFromModel(model) {
 
 export default function Model(props) {
   const model = useGLTF(props.modelName);
-  console.log(model);
   const scene = getSceneFromModel(model);
   var mesh = getMorphTargetMesh(model);
   const objRef = useRef();
