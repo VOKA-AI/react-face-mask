@@ -2,8 +2,8 @@ import './App.css';
 import { Canvas } from '@react-three/fiber'
 import FaceFollower from './FaceFollower';
 
-const drawWidth = "640px";
-const drawHeight = "480px";
+const drawWidth = "1280px";
+const drawHeight = "960px";
 const videoID = "video";
 const outputCanvasID = "output";
 
