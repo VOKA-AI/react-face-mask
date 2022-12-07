@@ -1,5 +1,6 @@
 import * as faceMesh from '@mediapipe/face_mesh';
 import { Camera } from '@mediapipe/camera_utils';
+import { Camera2 } from './camera';
 import { Face } from "kalidokit";
 import { modelUpdateBlandshape, modelUpdateModelPosition, modelUpdateModelRotation } from './Model2';
 import FacePositionDebugger from './debug/debug_utils';
@@ -18,9 +19,9 @@ var drawDebugger = null;
 var canvasCtx = null;
 var canvasElement = null;
 
-var x = 3;
-var y = 3;
-var z = -3;
+var x = 0;
+var y = 0;
+var z = 0;
 var rx = 0;
 var ry = 0;
 var rz = 0;
@@ -35,10 +36,10 @@ function update(riggedFace) {
   modelUpdateBlandshape({'eye-R':1 - riggedFace.eye.r,'eye-L':1 - riggedFace.eye.l, 'eyes-_down': 0, 'mouse':riggedFace.mouth.shape.A});
 
   // set position
-  modelUpdateModelPosition({'x':riggedFace.head.position.x, 'y':riggedFace.head.position.y, 'z':riggedFace.head.position.z});
+  //modelUpdateModelPosition({'x':riggedFace.head.position.x.toFixed(2), 'y':riggedFace.head.position.y.toFixed(2), 'z':riggedFace.head.position.z.toFixed(2)});
 
   // set rotation and apply it to position
-  modelUpdateModelRotation({'x': riggedFace.head.degrees.x, 'y': riggedFace.head.degrees.y, 'z':riggedFace.head.degrees.z});
+  //modelUpdateModelRotation({'x': riggedFace.head.degrees.x.toFixed(2), 'y': riggedFace.head.degrees.y.toFixed(2), 'z':riggedFace.head.degrees.z.toFixed(2)});
 }
 
 function drawFaceMesh(landmarks) {
@@ -91,7 +92,7 @@ function onResults(results) {
     }
     // drawFaceMesh(results.multiFaceLandmarks[0]);
     // drawDebugger.draw_points(results.multiFaceLandmarks[0], "#111111");
-    drawDebugger.draw_points(getFaceMeshPoints(results.multiFaceLandmarks[0], FaceMeshPoints.pupil[LEFT]), "#111111");
+    //drawDebugger.draw_points(getFaceMeshPoints(results.multiFaceLandmarks[0], FaceMeshPoints.face_oval), "#111111");
     
 
     let riggedFace;
@@ -107,7 +108,7 @@ function onResults(results) {
     update(riggedFace);
 }
 
-export function initFaceMesh(videoElement, faceFollower, _threeCamera, _canvasElement) {
+export async function initFaceMesh(videoElement, faceFollower, _threeCamera, _canvasElement) {
     _videoElement = videoElement;
     canvasElement = _canvasElement;
     canvasCtx = canvasElement.getContext('2d');
@@ -127,6 +128,9 @@ export function initFaceMesh(videoElement, faceFollower, _threeCamera, _canvasEl
     height: videoElement.style.height
     });
     camera.start();
+
+    let camera2 = await Camera2.build(videoElement, canvasElement);
+    console.log(camera2);
 
     // faceDebugger = new FacePositionDebugger(videoElement, _threeCamera, threeObject3D);
     let testCanvasElement = document.getElementById("test");

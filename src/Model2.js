@@ -5,8 +5,16 @@ import { useFrame } from '@react-three/fiber';
 
 var _model = null;
 var _mesh = null; // mesh with morph targets
+var times = 10000
 
 let blandshape = {
+ "Mfers_eyeL":0,
+ "Mfers_eyeR":0,
+ "Mfers_eyedown":0,
+ "Mfers_mouse":0,
+}
+
+let blandshape2 = {
  "eye-L":0,
  "eye-R":0,
  "eyes-_down":0,
@@ -32,17 +40,28 @@ function setMeshMorphTargetInfluences(blandshape) {
 }
 
 export function modelUpdateModelPosition(position) {
-    var x = (position['x'] - 160) / 50;
-    var y = -(position['y'] - 50) / 50;
-    var z = (position['z'] + 10) / 60;
+    console.log(position['z']);
+    var x = (position['x'] - 160) / 20;
+    var y = -(position['y'] - 20) / 40;
+    var z = (position['z'] - 40) / 5;
+    console.log(z);
+    x = Math.round(x * times) / times;
+    y = Math.round(y * times) / times;
+    z = Math.round(z * times) / times;
     _model.position.set(x, y, z);
 }
 
 export function modelUpdateModelRotation(rotation) {
   // set rotation and apply it to position
-  _model.rotation.x = -(rotation['x'] - 10) / 50;
-  _model.rotation.y = -rotation['y'] / 50;
-  _model.rotation.z = rotation['z'] / 50;
+  var rx = -(rotation['x'] - 10) / 50;
+  var ry = -rotation['y'] / 50;
+  var rz = rotation['z'] / 50;
+  rx = Math.round(rx * times) / times;
+  ry = Math.round(ry * times) / times;
+  rz = Math.round(rz * times) / times;
+  _model.rotation.x = rx;
+  _model.rotation.y = ry;
+  _model.rotation.z = rz;
 }
 
 
@@ -50,7 +69,7 @@ export function modelUpdateModelRotation(rotation) {
  * 获取包含morphTarget的mesh，不通的model可能不同
  */
 function getMorphTargetMesh(model) {
-  var mesh = model.scene.children[ 0 ];
+  var mesh = model.scene.children[ 0 ].children[ 2 ];
   _mesh = mesh;
   return mesh;
 }
