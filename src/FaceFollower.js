@@ -18,8 +18,8 @@ export default function FaceFollower(props) {
 
   return (
   	<mesh ref={objRef}>
-          <DebuggerModel modelName="/Brid.glb"/>
-  	  <Model modelName="/Brid.glb" scale="2.4" />
+          <DebuggerModel modelName="/Duck2.glb" />
+  	  <Model modelName="/Duck3.glb" scale="3.8" />
   	</mesh>
   )
 }
