@@ -2,9 +2,11 @@ import React from "react"
 import { useEffect, useRef } from 'react'
 import { useGLTF, useTexture } from "@react-three/drei"
 import { useFrame } from '@react-three/fiber';
+import { damp3, dampE } from 'maath/easing'
 
 var _model = null;
 var _mesh = null; // mesh with morph targets
+var _delta = null;
 
 let blandshape = {
  "eye-L":0,
@@ -32,17 +34,21 @@ function setMeshMorphTargetInfluences(blandshape) {
 }
 
 export function modelUpdateModelPosition(position) {
-    var x = (position['x'] - 160) / 50;
-    var y = -(position['y'] - 50) / 50;
-    var z = (position['z'] + 10) / 60;
-    _model.position.set(x, y, z);
+  
+    var x = (position['x'] - 320) / 60;
+    var y = -(position['y'] - 150) / 60;
+    var z = (position['z'] - 40) / 5;
+    damp3(_model.position, [x, y, z], 0.25, _delta * 5);
+
+    //_model.position.lerp(new Vector3(x, y, z), smoothness);
 }
 
 export function modelUpdateModelRotation(rotation) {
   // set rotation and apply it to position
-  _model.rotation.x = -(rotation['x'] - 10) / 50;
-  _model.rotation.y = -rotation['y'] / 50;
-  _model.rotation.z = rotation['z'] / 50;
+  var rx = -(rotation['x'] - 10) / 50;
+  var ry = -rotation['y'] / 50;
+  var rz = rotation['z'] / 50;
+  dampE(_model.rotation, [rx, ry, rz], 0.25, _delta * 3)
 }
 
 
@@ -50,8 +56,7 @@ export function modelUpdateModelRotation(rotation) {
  * 获取包含morphTarget的mesh，不通的model可能不同
  */
 function getMorphTargetMesh(model) {
-  var mesh = model.scene.children[ 0 ];
-  _mesh = mesh;
+  var mesh = model.scene.children[ 0 ].children[ 1 ];
   return mesh;
 }
 
@@ -67,12 +72,15 @@ export default function Model(props) {
   const model = useGLTF(props.modelName);
   const scene = getSceneFromModel(model);
   var mesh = getMorphTargetMesh(model);
+  _mesh = mesh;
+
   const objRef = useRef();
   useEffect(() => {
     _model = objRef.current;
   });
 
   useFrame((state, delta) => {
+    _delta = delta;
     setMeshMorphTargetInfluences(blandshape,""); // 每一帧，都修改blandshapes的值，做出相应表情
   });
 
