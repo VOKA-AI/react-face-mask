@@ -3,7 +3,6 @@ import { useEffect, useRef } from 'react'
 import { initFaceMesh } from './FaceDetector'
 
 import Model, { modelUpdate } from './Model2';
-import DebuggerModel from './debug/model_debugger';
 
 export default function FaceFollower(props) {
   const objRef = useRef();
@@ -18,7 +17,6 @@ export default function FaceFollower(props) {
 
   return (
   	<mesh ref={objRef}>
-          <DebuggerModel modelName="/Duck2.glb" />
   	  <Model modelName="/Duck3.glb" scale="3.8" />
   	</mesh>
   )
