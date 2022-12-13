@@ -2,10 +2,12 @@ import React from "react"
 import { useEffect, useRef } from 'react'
 import { useGLTF, useTexture } from "@react-three/drei"
 import { useFrame } from '@react-three/fiber';
+import { Vector3 } from "three";
+import { damp3, dampE } from 'maath/easing'
 
 var _model = null;
 var _mesh = null; // mesh with morph targets
-var times = 10000
+var _delta = null;
 
 let blandshape = {
  "Mfers_eyeL":0,
@@ -40,15 +42,13 @@ function setMeshMorphTargetInfluences(blandshape) {
 }
 
 export function modelUpdateModelPosition(position) {
-    console.log(position['z']);
-    var x = (position['x'] - 160) / 20;
-    var y = -(position['y'] - 20) / 40;
+  
+    var x = (position['x'] - 320) / 60;
+    var y = -(position['y'] - 150) / 60;
     var z = (position['z'] - 40) / 5;
-    console.log(z);
-    x = Math.round(x * times) / times;
-    y = Math.round(y * times) / times;
-    z = Math.round(z * times) / times;
-    _model.position.set(x, y, z);
+    damp3(_model.position, [x, y, z], 0.25, _delta * 5);
+
+    //_model.position.lerp(new Vector3(x, y, z), smoothness);
 }
 
 export function modelUpdateModelRotation(rotation) {
@@ -56,12 +56,7 @@ export function modelUpdateModelRotation(rotation) {
   var rx = -(rotation['x'] - 10) / 50;
   var ry = -rotation['y'] / 50;
   var rz = rotation['z'] / 50;
-  rx = Math.round(rx * times) / times;
-  ry = Math.round(ry * times) / times;
-  rz = Math.round(rz * times) / times;
-  _model.rotation.x = rx;
-  _model.rotation.y = ry;
-  _model.rotation.z = rz;
+  dampE(_model.rotation, [rx, ry, rz], 0.25, _delta * 3)
 }
 
 
@@ -92,6 +87,7 @@ export default function Model(props) {
   });
 
   useFrame((state, delta) => {
+    _delta = delta;
     setMeshMorphTargetInfluences(blandshape,""); // 每一帧，都修改blandshapes的值，做出相应表情
   });
 
