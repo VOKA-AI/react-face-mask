@@ -1,8 +1,7 @@
 import React from "react"
 import { useEffect, useRef } from 'react'
-import { useGLTF, useTexture } from "@react-three/drei"
+import { useGLTF } from "@react-three/drei"
 import { useFrame } from '@react-three/fiber';
-import { Vector3 } from "three";
 import { damp3, dampE } from 'maath/easing'
 
 var _model = null;
@@ -64,8 +63,7 @@ export function modelUpdateModelRotation(rotation) {
  * 获取包含morphTarget的mesh，不通的model可能不同
  */
 function getMorphTargetMesh(model) {
-  var mesh = model.scene.children[ 0 ].children[ 2 ];
-  _mesh = mesh;
+  var mesh = model.scene.children[ 0 ].children[ 1 ];
   return mesh;
 }
 
@@ -81,6 +79,8 @@ export default function Model(props) {
   const model = useGLTF(props.modelName);
   const scene = getSceneFromModel(model);
   var mesh = getMorphTargetMesh(model);
+  _mesh = mesh;
+
   const objRef = useRef();
   useEffect(() => {
     _model = objRef.current;
